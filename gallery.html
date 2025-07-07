@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -420,26 +421,6 @@ body.dark .share img {
 
 <a class="back-home" href="index.html">← Back to Home</a>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js"></script>
-<script>
-  const firebaseConfig = {
-  apiKey: "AIzaSyAy6DfsoQwzJcX9BZZrlbIPU2nx5MmG6iY",
-  authDomain: "gallerycomments-54c90.firebaseapp.com",
-  projectId: "gallerycomments-54c90",
-  storageBucket: "gallerycomments-54c90.firebasestorage.app",
-  messagingSenderId: "687350230919",
-  appId: "1:687350230919:web:9ff4db45e00c7b14596d22"
-};
-
-
-  // Initialize Firebase
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
-
-
 <script>
   let modalEditID = null;
   let modalOldText = null;
@@ -498,15 +479,13 @@ function saveComment(btn) {
     list.appendChild(commentEl);
     textarea.value = '';
 
-    // Simpan ke Firebase
-    db.collection("comments").add({
-      photoId: id,
-      text: comment,
-      timestamp: new Date()
-    });
+    // Simpan ke localStorage
+    let comments = JSON.parse(localStorage.getItem("comments")) || {};
+    if (!comments[id]) comments[id] = [];
+    comments[id].push(comment);
+    localStorage.setItem("comments", JSON.stringify(comments));
   }
 }
-
 
 
 function createCommentElement(id, text) {
@@ -570,20 +549,17 @@ function deleteComment(id, text, element) {
 
 
 function loadComments() {
-  db.collection("comments").orderBy("timestamp").get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      const id = data.photoId;
-      const text = data.text;
-      const list = document.querySelector(`.comment-list[data-id="${id}"]`);
-      if (list) {
+  let comments = JSON.parse(localStorage.getItem("comments")) || {};
+  Object.keys(comments).forEach(id => {
+    const list = document.querySelector(`.comment-list[data-id="${id}"]`);
+    if (list) {
+      comments[id].forEach(text => {
         const commentEl = createCommentElement(id, text);
         list.appendChild(commentEl);
-      }
-    });
+      });
+    }
   });
 }
-
 
 function updateComment(id, oldText, newText, element) {
   let comments = JSON.parse(localStorage.getItem("comments")) || {};
