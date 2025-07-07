@@ -421,9 +421,19 @@ body.dark .share img {
 <a class="back-home" href="index.html">← Back to Home</a>
 
 <script>
+  let modalEditID = null;
+  let modalOldText = null;
+  let modalElement = null;
+
+  let modalDeleteID = null;
+  let modalDeleteText = null;
+  let modalDeleteElement = null;
+
   window.onload = () => {
-    document.getElementById('loading').style.display = 'none';
-  };
+  document.getElementById('loading').style.display = 'none';
+  loadComments(); // ✅ load komentar saat halaman dibuka
+};
+
 
   const images = ["Us 3.jpg", "Us 2.jpg", "Us 1.jpg", "Us 4.jpg"];
   let currentIndex = 0;
@@ -464,38 +474,105 @@ function saveComment(btn) {
   const comment = textarea.value.trim();
   if (comment) {
     const list = document.querySelector(`.comment-list[data-id="${id}"]`);
-    const p = document.createElement('p');
-    p.textContent = comment;
-    list.appendChild(p);
+    const commentEl = createCommentElement(id, comment);
+    list.appendChild(commentEl);
     textarea.value = '';
+
+    // Simpan ke localStorage
+    let comments = JSON.parse(localStorage.getItem("comments")) || {};
+    if (!comments[id]) comments[id] = [];
+    comments[id].push(comment);
+    localStorage.setItem("comments", JSON.stringify(comments));
   }
-
-  function toggleLove(el) {
-  const span = el.querySelector("span");
-  let count = parseInt(span.textContent);
-
-  if (el.classList.contains("loved")) {
-    el.classList.remove("loved");
-    count--;
-  } else {
-    el.classList.add("loved");
-    count++;
-  }
-
-  span.textContent = count;
 }
 
 
+function createCommentElement(id, text) {
+  const p = document.createElement('p');
+  p.textContent = text;
+  p.style.display = 'inline';
 
-//   function toggleLove(el) {
-//   const countEl = el.querySelector("span");
-//   let count = parseInt(countEl.textContent);
-//   countEl.textContent = count + 1;
-// }
-  
-    el.classList.toggle("loved");
-    const loveCount = el.querySelector("span");
-    loveCount.textContent = parseInt(loveCount.textContent) + (el.classList.contains("loved") ? 1 : -1);
+  // ✅ BUAT tombol Edit
+  const edit = document.createElement('button');
+  edit.textContent = '✏️';
+  edit.style.marginLeft = '8px';
+  edit.style.cursor = 'pointer';
+  edit.style.background = 'none';
+  edit.style.border = 'none';
+  edit.style.color = 'blue';
+  edit.style.fontSize = '0.9em';
+
+  // ✅ BUAT tombol Delete
+  const del = document.createElement('button');
+  del.textContent = '🗑️';
+  del.style.marginLeft = '6px';
+  del.style.cursor = 'pointer';
+  del.style.background = 'none';
+  del.style.border = 'none';
+  del.style.color = 'red';
+  del.style.fontSize = '0.9em';
+
+  // ✅ Tambahkan aksi edit & delete ke tombolnya
+  edit.onclick = () => {
+    modalEditID = id;
+    modalOldText = text;
+    modalElement = wrapper;
+    document.getElementById('editText').value = text;
+    document.getElementById('editModal').style.display = 'flex';
+  };
+
+  del.onclick = () => {
+    modalDeleteID = id;
+    modalDeleteText = text;
+    modalDeleteElement = wrapper;
+    document.getElementById('deleteModal').style.display = 'flex';
+  };
+
+  // ✅ Bungkus ke dalam satu elemen
+  const wrapper = document.createElement('div');
+  wrapper.appendChild(p);
+  wrapper.appendChild(edit);
+  wrapper.appendChild(del);
+
+  return wrapper;
+}
+
+function deleteComment(id, text, element) {
+  let comments = JSON.parse(localStorage.getItem("comments")) || {};
+  if (comments[id]) {
+    comments[id] = comments[id].filter(c => c !== text);
+    localStorage.setItem("comments", JSON.stringify(comments));
+  }
+  element.remove();
+}
+
+
+function loadComments() {
+  let comments = JSON.parse(localStorage.getItem("comments")) || {};
+  Object.keys(comments).forEach(id => {
+    const list = document.querySelector(`.comment-list[data-id="${id}"]`);
+    if (list) {
+      comments[id].forEach(text => {
+        const commentEl = createCommentElement(id, text);
+        list.appendChild(commentEl);
+      });
+    }
+  });
+}
+
+function updateComment(id, oldText, newText, element) {
+  let comments = JSON.parse(localStorage.getItem("comments")) || {};
+  if (comments[id]) {
+    const index = comments[id].indexOf(oldText);
+    if (index !== -1) {
+      comments[id][index] = newText;
+      localStorage.setItem("comments", JSON.stringify(comments));
+
+      // Ganti tampilan
+      const newElement = createCommentElement(id, newText);
+      element.replaceWith(newElement);
+    }
+  }
 }
 
 function setThemeColor(color) {
@@ -571,6 +648,28 @@ function toggleLayout() {
   }
 }
 
+function confirmEdit() {
+  const newText = document.getElementById('editText').value.trim();
+  if (newText && newText !== modalOldText) {
+    updateComment(modalEditID, modalOldText, newText, modalElement);
+  }
+  closeEditModal();
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').style.display = 'none';
+}
+
+function confirmDelete() {
+  deleteComment(modalDeleteID, modalDeleteText, modalDeleteElement);
+  closeDeleteModal();
+}
+
+function closeDeleteModal() {
+  document.getElementById('deleteModal').style.display = 'none';
+}
+
+
 
   // Auto slideshow in lightbox
   setInterval(() => {
@@ -582,6 +681,30 @@ function toggleLayout() {
 <audio id="ambience" loop>
   <source src="https://cdn.pixabay.com/download/audio/2022/03/02/audio_8cd393ef0f.mp3" type="audio/mpeg">
 </audio>
+
+<!-- Modal Edit -->
+<div id="editModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:10000; align-items:center; justify-content:center;">
+  <div style="background:white; padding:20px; border-radius:10px; width:300px; max-width:90%; text-align:center;">
+    <h3>Edit Comment</h3>
+    <textarea id="editText" style="width:100%; padding:8px; border-radius:6px;"></textarea>
+    <div style="margin-top:12px;">
+      <button onclick="confirmEdit()" style="margin-right:10px;">Save</button>
+      <button onclick="closeEditModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Delete -->
+<div id="deleteModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:10000; align-items:center; justify-content:center;">
+  <div style="background:white; padding:20px; border-radius:10px; width:300px; max-width:90%; text-align:center;">
+    <h3>Delete this comment?</h3>
+    <div style="margin-top:12px;">
+      <button onclick="confirmDelete()" style="margin-right:10px; background:red; color:white;">Yes</button>
+      <button onclick="closeDeleteModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 
 </body>
 </html>
