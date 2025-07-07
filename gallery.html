@@ -420,6 +420,25 @@ body.dark .share img {
 
 <a class="back-home" href="index.html">← Back to Home</a>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "🔑 API KEY DARI LANGKAH SEBELUMNYA",
+    authDomain: "xxx.firebaseapp.com",
+    projectId: "xxx",
+    storageBucket: "xxx.appspot.com",
+    messagingSenderId: "xxx",
+    appId: "xxx"
+  };
+
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
+
 <script>
   let modalEditID = null;
   let modalOldText = null;
@@ -478,13 +497,15 @@ function saveComment(btn) {
     list.appendChild(commentEl);
     textarea.value = '';
 
-    // Simpan ke localStorage
-    let comments = JSON.parse(localStorage.getItem("comments")) || {};
-    if (!comments[id]) comments[id] = [];
-    comments[id].push(comment);
-    localStorage.setItem("comments", JSON.stringify(comments));
+    // Simpan ke Firebase
+    db.collection("comments").add({
+      photoId: id,
+      text: comment,
+      timestamp: new Date()
+    });
   }
 }
+
 
 
 function createCommentElement(id, text) {
@@ -548,17 +569,20 @@ function deleteComment(id, text, element) {
 
 
 function loadComments() {
-  let comments = JSON.parse(localStorage.getItem("comments")) || {};
-  Object.keys(comments).forEach(id => {
-    const list = document.querySelector(`.comment-list[data-id="${id}"]`);
-    if (list) {
-      comments[id].forEach(text => {
+  db.collection("comments").orderBy("timestamp").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const id = data.photoId;
+      const text = data.text;
+      const list = document.querySelector(`.comment-list[data-id="${id}"]`);
+      if (list) {
         const commentEl = createCommentElement(id, text);
         list.appendChild(commentEl);
-      });
-    }
+      }
+    });
   });
 }
+
 
 function updateComment(id, oldText, newText, element) {
   let comments = JSON.parse(localStorage.getItem("comments")) || {};
