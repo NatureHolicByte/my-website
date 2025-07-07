@@ -1,0 +1,19 @@
+{
+    "name": "Birthday Gift for Dwi Yanti",
+    "short_name": "Happy B-Day 💖",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#ff9a9e",
+    "theme_color": "#fad0c4",
+    "description": "A heartfelt birthday web gift for Dwi Yanti Solehah 💕",
+    "icons": [
+      {
+        "src": "https://emojiapi.dev/api/v1/2764/192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ]
+  }
+  

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <!-- ✅ Tambahkan ini -->
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <script src="https://unpkg.com/isotope-layout@3/dist/layout-modes/masonry.min.js"></script>
+  
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #fff0f5, #fbeaff);
+      color: #333;
+      text-align: center;
+      padding: 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background: #222;
+      color: #eee;
+    }
+
+    .love-btn {
+  cursor: pointer;
+  margin-top: 5px;
+  color: #d63384;
+  font-size: 1em;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+.loved {
+  color: red;
+}
+
+.love-btn:hover {
+  transform: scale(1.2);
+}
+
+
+    #loading {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: white;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    h1::after {
+      content: '';
+      animation: typing 2s steps(30, end), blink 0.7s step-end infinite;
+      white-space: nowrap;
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: bottom;
+    }
+
+    @keyframes typing {
+      from { content: '📸'; }
+      to { content: '📸 Our Beautiful Gallery'; }
+    }
+
+    @keyframes blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: #d63384; }
+    }
+
+    .toggle-dark {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 8px 12px;
+      background: #d63384;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 10000;
+    }
+
+    .filter-buttons {
+      margin-bottom: 20px;
+    }
+
+    .filter-buttons button {
+      margin: 5px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff6f91;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    } */
+
+    .gallery {
+  position: relative; /* penting untuk masonry */
+  margin: 0 auto;
+}
+
+
+    .gallery {
+  transition: all 0.3s ease;
+}
+    .gallery.masonry {
+      display: block;
+    }
+    .gallery.masonry .photo {
+      width: calc(33.333% - 20px);
+      margin-bottom: 20px;
+    }
+
+    .photo {
+      width: 220px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    .dark .photo { background: #333; color: #eee; }
+
+    .photo img {
+      width: 100%;
+      display: block;
+    }
+
+    .photo:hover { transform: scale(1.03); }
+
+    .caption {
+      padding: 8px 12px;
+    font-size: 0.9em;
+    color: #444;
+    min-height: 60px;
+    }
+
+    .photo:nth-child(odd) .caption {
+  min-height: 120px;
+  }
+
+  .photo:nth-child(odd) .caption {
+  min-height: 60px;
+}
+
+.photo:nth-child(even) .caption {
+  min-height: 100px;
+}
+
+
+    .share {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 0;
+    }
+    
+
+    .share img {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.3s;
+    }
+
+    .share img:hover {
+      transform: scale(1.2);
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.95);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 1000;
+    }
+
+    .lightbox.active { display: flex; }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 80vh;
+      border-radius: 12px;
+    }
+
+    .lightbox .nav-btn {
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      margin: 10px;
+      user-select: none;
+    }
+
+    .back-home {
+      margin-top: 30px;
+      display: inline-block;
+      color: #d63384;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .stars {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      background: url('https://raw.githubusercontent.com/lokesh-coder/pretty-checkbox/master/docs/images/stars.svg') repeat;
+      animation: moveBg 120s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes moveBg {
+      0% { background-position: 0 0; }
+      100% { background-position: 2000px 2000px; }
+    }
+
+    .photo {
+  width: 100%;
+}
+@media (min-width: 600px) {
+  .photo {
+    width: calc(50% - 20px);
+  }
+}
+@media (min-width: 900px) {
+  .photo {
+    width: calc(33.333% - 20px);
+  }
+}
+@media (min-width: 1200px) {
+
+      .comment-box {
+  padding: 10px;
+  text-align: left;
+  margin: 0 10px 15px;
+  font-size: 0.85em;
+}
+
+.comment-box textarea {
+  width: 100%;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+.comment-box button {
+  margin-top: 6px;
+  background-color: #d63384;
+  border: none;
+  padding: 6px 12px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+
+.comment-list {
+  font-size: 0.85em;
+  margin-top: 5px;
+  color: #555;
+}
+
+    }
+    :root {
+  --primary-color: #ff6f91;
+}
+
+.filter-buttons button,
+.toggle-dark,
+.comment-box button {
+  background-color: var(--primary-color);
+}
+
+  </style>
+</head>
+<body>
+<div id="loading">Loading Gallery...</div>
+<div class="stars"></div>
+<button class="toggle-dark" onclick="toggleDark()">🌙 Dark Mode</button>
+<div style="margin: 20px 0;">
+  <label for="themeColor">🎨 Theme Color: </label>
+  <input type="color" id="themeColor" value="#ff6f91" onchange="setThemeColor(this.value)">
+</div>
+
+<!-- <div style="margin: 20px 0;">
+  <label for="themeColor">🎨 Theme Color: </label>
+  <input type="color" id="themeColor" value="#ff6f91" onchange="setThemeColor(this.value)">
+</div> -->
+
+<h1>📸 Our Beautiful Gallery</h1>
+
+<div class="filter-buttons">
+  <button data-filter="*">All</button>
+  <button data-filter=".travel">Travel</button>
+  <button data-filter=".special">Special Moments</button>
+</div>
+
+<div style="margin: 10px 0;">
+  <button onclick="toggleLayout()">🔲 Toggle Grid ↔ Masonry</button>
+</div>
+
+
+
+<div class="gallery">
+  <div class="photo travel">
+    <img src="Us 3.jpg" onclick="openLightbox(0)">
+    <div class="caption">Kiss her cheeks 😙</div>
+    <div class="share">
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="FB"></a>
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="IG"></a>
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="X"></a>
+    </div>
+    <div class="love-btn" data-id="3" onclick="toggleLove(this)">❤️ <span>10</span></div>
+    <div class="comment-box">
+      <textarea placeholder="Leave a comment..." data-id="0"></textarea>
+      <button onclick="saveComment(this)">Post</button>
+      <div class="comment-list" data-id="0"></div>
+    </div>
+  </div>
+
+  <div class="photo special">
+    <img src="Us 2.jpg" onclick="openLightbox(1)">
+    <div class="caption">Gemeshh Pacalkuu 😙</div>
+    <div class="share">
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"></a>
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"></a>
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png"></a>
+    </div>
+    <div class="love-btn" data-id="2" onclick="toggleLove(this)">❤️ <span>500</span></div>
+    <div class="comment-box">
+      <textarea placeholder="Leave a comment..." data-id="1"></textarea>
+      <button onclick="saveComment(this)">Post</button>
+      <div class="comment-list" data-id="1"></div>
+    </div>
+  </div>
+
+  <div class="photo travel">
+    <img src="Us 1.jpg" onclick="openLightbox(2)">
+    <div class="caption">First lunch with my beloved ❤️ </div>
+    <div class="share">
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"></a>
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"></a>
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png"></a>
+    </div>
+    <div class="love-btn" data-id="1" onclick="toggleLove(this)">❤️ <span>1</span></div>
+    <div class="comment-box">
+      <textarea placeholder="Leave a comment..." data-id="2"></textarea>
+      <button onclick="saveComment(this)">Post</button>
+      <div class="comment-list" data-id="2"></div>
+    </div>
+  </div>
+
+  <div class="photo special">
+    <img src="Us 4.jpg" onclick="openLightbox(3)">
+    <div class="caption">Finally i hold ur beautiful hand 💌</div>
+    <div class="share">
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"></a>
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"></a>
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png"></a>
+    </div>
+    <div class="love-btn" data-id="0" onclick="toggleLove(this)">❤️ <span>100</span></div>
+    <div class="comment-box">
+      <textarea placeholder="Leave a comment..." data-id="3"></textarea>
+      <button onclick="saveComment(this)">Post</button>
+      <div class="comment-list" data-id="3"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <span class="nav-btn" onclick="prevImage()">❮</span>
+  <img id="lightbox-img" src="">
+  <span class="nav-btn" onclick="nextImage()">❯</span>
+</div>
+
+<a class="back-home" href="index.html">← Back to Home</a>
+
+<script>
+  window.onload = () => {
+    document.getElementById('loading').style.display = 'none';
+  };
+
+  const images = ["Gw1.jpg.jpg", "Bocil1.jpg.jpg", "Gw2.jpg.jpg", "Bocil2.jpg.jpg"];
+  let currentIndex = 0;
+
+  function openLightbox(index) {
+    currentIndex = index;
+    document.getElementById("lightbox").classList.add("active");
+    document.getElementById("lightbox-img").src = images[currentIndex];
+  }
+
+  function closeLightbox() {
+    document.getElementById("lightbox").classList.remove("active");
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    document.getElementById("lightbox-img").src = images[currentIndex];
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    document.getElementById("lightbox-img").src = images[currentIndex];
+  }
+
+  function toggleDark() {
+  document.body.classList.toggle("dark");
+  const audio = document.getElementById("ambience");
+  if (document.body.classList.contains("dark")) {
+    audio.play();
+  } else {
+    audio.pause();
+  }
+}
+
+function saveComment(btn) {
+  const textarea = btn.previousElementSibling;
+  const id = textarea.dataset.id;
+  const comment = textarea.value.trim();
+  if (comment) {
+    const list = document.querySelector(`.comment-list[data-id="${id}"]`);
+    const p = document.createElement('p');
+    p.textContent = comment;
+    list.appendChild(p);
+    textarea.value = '';
+  }
+
+  function toggleLove(el) {
+  const span = el.querySelector("span");
+  let count = parseInt(span.textContent);
+
+  if (el.classList.contains("loved")) {
+    el.classList.remove("loved");
+    count--;
+  } else {
+    el.classList.add("loved");
+    count++;
+  }
+
+  span.textContent = count;
+}
+
+
+
+//   function toggleLove(el) {
+//   const countEl = el.querySelector("span");
+//   let count = parseInt(countEl.textContent);
+//   countEl.textContent = count + 1;
+// }
+  
+    el.classList.toggle("loved");
+    const loveCount = el.querySelector("span");
+    loveCount.textContent = parseInt(loveCount.textContent) + (el.classList.contains("loved") ? 1 : -1);
+}
+
+function setThemeColor(color) {
+  document.documentElement.style.setProperty('--primary-color', color);
+  localStorage.setItem('themeColor', color);
+}
+
+let iso; // deklarasi di luar agar global
+
+window.addEventListener("DOMContentLoaded", () => {
+  const saved = localStorage.getItem("themeColor");
+  if (saved) {
+    setThemeColor(saved);
+    document.getElementById('themeColor').value = saved;
+  }
+
+  iso = new Isotope('.gallery', {
+  itemSelector: '.photo',
+  layoutMode: 'fitRows', // Default layout mode
+});
+
+  document.querySelectorAll('.filter-buttons button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filterValue = btn.getAttribute('data-filter');
+      iso.arrange({ filter: filterValue });
+    });
+  });
+});
+
+
+
+// Swipe Gesture
+let touchStartX = 0;
+let touchEndX = 0;
+
+const lightbox = document.getElementById("lightbox");
+lightbox.addEventListener("touchstart", (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+}, false);
+
+lightbox.addEventListener("touchend", (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+  if (touchEndX < touchStartX - 50) nextImage();
+  if (touchEndX > touchStartX + 50) prevImage();
+}, false);
+
+
+
+  document.getElementById("lightbox").addEventListener("click", closeLightbox);
+
+  // function toggleDark() {
+  //   document.body.classList.toggle("dark");
+  // }
+
+  // const iso = new Isotope('.gallery', {
+  //   itemSelector: '.photo',
+  //   layoutMode: 'fitRows'
+  // });
+
+  document.querySelectorAll('.filter-buttons button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filterValue = btn.getAttribute('data-filter');
+      iso.arrange({ filter: filterValue });
+    });
+  });
+
+  let currentLayout = 'fitRows';
+
+function toggleLayout() {
+  currentLayout = currentLayout === 'fitRows' ? 'masonry' : 'fitRows';
+  if (iso) {
+    iso.arrange({ layoutMode: currentLayout });
+  }
+}
+
+
+  // Auto slideshow in lightbox
+  setInterval(() => {
+    if (document.getElementById("lightbox").classList.contains("active")) {
+      nextImage();
+    }
+  }, 5000);
+</script>
+<audio id="ambience" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/02/audio_8cd393ef0f.mp3" type="audio/mpeg">
+</audio>
+
+</body>
+</html>

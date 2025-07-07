@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday, Dwi Yanti Solehah!</title>
+  <link rel="icon" href="https://emojiapi.dev/api/v1/2764/32.png" type="image/png">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      color: #fff;
+      text-align: center;
+      animation: backgroundFade 10s ease infinite alternate;
+      overflow-x: hidden;
+    }
+
+    @keyframes backgroundFade {
+      0% { background: linear-gradient(135deg, #ff9a9e, #fad0c4); }
+      100% { background: linear-gradient(135deg, #fbc2eb, #a6c1ee); }
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 50px auto;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px 30px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      animation: fadeInContainer 2s ease forwards;
+    }
+
+    @keyframes fadeInContainer {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: 2.8em;
+      margin-bottom: 0.3em;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    .section {
+      margin: 2.5em 0;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: slideUp 1s ease forwards;
+    }
+
+    .section:nth-child(3) { animation-delay: 1s; }
+    .section:nth-child(4) { animation-delay: 2s; }
+    .section:nth-child(5) { animation-delay: 3s; }
+    .section:nth-child(6) { animation-delay: 4s; }
+
+    @keyframes slideUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    nav a {
+      margin: 0 12px;
+      color: #fff;
+      font-weight: bold;
+      text-decoration: none;
+      background: rgba(255,255,255,0.2);
+      padding: 8px 14px;
+      border-radius: 12px;
+    }
+
+    nav a:hover {
+      background: rgba(255,255,255,0.4);
+    }
+
+    #countdown {
+      font-size: 1.2em;
+      color: #ffe4e1;
+    }
+
+    iframe {
+      border: none;
+      border-radius: 12px;
+      max-width: 100%;
+    }
+
+    img {
+      width: 180px;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, opacity 0.5s ease;
+    }
+
+    img:hover {
+      transform: scale(1.05);
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff6f91;
+      color: white;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    footer {
+      margin-top: 3em;
+      font-size: 0.9em;
+      color: #fff5f5;
+    }
+  </style>
+</head>
+<body>
+  <audio autoplay loop>
+    <source src="https://drive.google.com/uc?export=download&id=15LKsGyV-IV4Jh6sJyXWUj0SEp4CQYkLa" type="audio/mpeg">
+  </audio>
+
+  <!-- Popup Kejutan -->
+  <div id="popup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); color:white; z-index:9999; justify-content:center; align-items:center; flex-direction:column; text-align:center; padding:30px;">
+    <h2 style="margin-bottom: 20px;">Hi Sayang! 💝</h2>
+    <p style="max-width: 420px; margin-bottom: 25px;">This site is my little gift for your special day. Scroll down and click the Secret Message to feel how much I love you.</p>
+    <button onclick="closePopup()" style="padding:10px 20px; font-size:16px; border:none; background-color:#ff6f91; color:white; border-radius:8px;">Okay 💕</button>
+  </div>
+
+  <audio id="popupSound">
+    <source src="https://cdn.pixabay.com/audio/2022/03/08/audio_631b9f4ff5.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="container">
+    <h1>Happy Birthday, Dwi Yanti Solehah 💗</h1>
+
+    <nav class="section">
+      <a href="gallery.html">📷 Gallery</a>
+      <a href="letter.html">💌 Letter</a>
+    </nav>
+
+    <div id="countdown" class="section">
+      <span id="days">--</span> Days 
+      <span id="hours">--</span> Hours 
+      <span id="minutes">--</span> Minutes 
+      <span id="seconds">--</span> Seconds
+    </div>
+
+    <div class="section">
+      <p>Dear Sayangkuuu,</p>
+      <p>Even though we're miles apart, my heart is always with you.</p>
+      <p>Thank you for being an amazing partner. I can't wait to celebrate together someday!</p>
+    </div>
+
+    <div class="section">
+      <h2>🎶 Playlist for You</h2>
+      <iframe src="https://open.spotify.com/embed/playlist/1t3rbAnCF3ypTSLUmpf3hd?utm_source=generator" width="100%" height="80" allow="encrypted-media"></iframe>
+    </div>
+
+    <div class="section">
+      <h2>🎥 My Birthday Wish</h2>
+      <iframe width="100%" height="315" src="https://www.youtube.com/embed/CAx1tOvWXF4?rel=0" title="Birthday Message" allowfullscreen></iframe>
+    </div>
+
+    <div class="section">
+      <h2>📸 Our Moment</h2>
+      <img src="Us 5.jpg" alt="Dwi Yanti smiling brightly" />
+    </div>
+
+    <div class="section">
+      <h2>💌 Secret Message</h2>
+      <button onclick="revealMessage()">Click to Reveal</button>
+      <p id="secret" style="display: none; margin-top: 1em;">I love you more than words can ever express. You're my forever and always ❤️</p>
+    </div>
+
+    <footer>Made with ❤️ by your lovely bf, Mas Abhi &lt;3</footer>
+  </div>
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+  <script>
+    const birthday = new Date("2026-02-25T09:00:00");
+    function updateCountdown() {
+      const now = new Date();
+      const diff = birthday - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      document.getElementById("days").textContent = days >= 0 ? days : 0;
+      document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+      document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+      document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // Falling hearts
+    const createHeart = () => {
+      const heart = document.createElement("div");
+      heart.innerHTML = "❤️";
+      heart.style.position = "fixed";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.top = "-2vh";
+      heart.style.fontSize = Math.random() * 20 + 20 + "px";
+      heart.style.animation = "fall 4s linear forwards";
+      heart.style.zIndex = "998";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 4000);
+    };
+    setInterval(createHeart, 300);
+
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes fall {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(100vh); opacity: 0; }
+    }`;
+    document.head.appendChild(style);
+
+    // Popup logic
+    function closePopup() {
+      document.getElementById('popup').style.display = 'none';
+    }
+
+    window.onload = () => {
+      setTimeout(() => {
+        document.getElementById('popup').style.display = 'flex';
+        document.getElementById('popupSound').play().catch(() => {});
+        setTimeout(() => closePopup(), 10000);
+      }, 1500);
+    };
+
+    function revealMessage() {
+      document.getElementById('secret').style.display = 'block';
+      confetti();
+      event.target.style.display = 'none';
+    }
+
+//     // Register Service Worker
+//     if ('serviceWorker' in navigator) {
+//       navigator.serviceWorker.register('service-worker.js');
+//     }
+//   </script>
+//   <script>
+//   if ("serviceWorker" in navigator) {
+//     window.addEventListener("load", () => {
+//       navigator.serviceWorker.register("service-worker.js")
+//         .then((reg) => console.log("Service Worker registered!", reg))
+//         .catch((err) => console.log("SW registration failed: ", err));
+//     });
+//   }
+// </script>
+
+</body>
+</html>
+<!-- </body>
+ -->
