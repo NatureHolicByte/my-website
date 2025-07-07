@@ -293,6 +293,30 @@
   background-color: var(--primary-color);
 }
 
+body.dark .caption,
+body.dark .comment-list,
+body.dark textarea,
+body.dark .comment-box button,
+body.dark .love-btn,
+body.dark h1,
+body.dark label {
+  color: #eee;
+}
+
+body.dark .comment-box textarea {
+  background-color: #444;
+  border-color: #666;
+  color: #eee;
+}
+
+body.dark .comment-box button {
+  background-color: #d63384;
+  color: white;
+}
+
+body.dark .share img {
+  filter: brightness(0.8);
+}
   </style>
 </head>
 <body>
@@ -320,8 +344,6 @@
 <div style="margin: 10px 0;">
   <button onclick="toggleLayout()">🔲 Toggle Grid ↔ Masonry</button>
 </div>
-
-
 
 <div class="gallery">
   <div class="photo travel">
